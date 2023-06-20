@@ -23,5 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Build outputs
+tsconfig.tsbuildinfo
+web/*.js
+web/*.d.ts
+
 # Environment Variables
 .env
