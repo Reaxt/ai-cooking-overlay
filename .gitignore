@@ -5,7 +5,7 @@ node_modules
 dist
 *.local
 tsconfig.tsbuildinfo
-server/*.d.ts
+server/**/*.d.ts
 
 # Editor directories and files
 .vscode/*
