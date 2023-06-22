@@ -1,4 +1,5 @@
 import z from "zod"
+import { MoneyAmountResponse } from "./api-responses"
 
 const ACCEPTED_EVENT_TYPES = [
   "private:direct:donation_updated",
@@ -7,13 +8,10 @@ const ACCEPTED_EVENT_TYPES = [
 
 export const WebhookResponse = z.object({
   data: z.object({
-    amount: z.object({
-      currency: z.string(),
-      value: z.string().pipe(z.coerce.number()),
-    }),
+    amount: MoneyAmountResponse,
     campaign_id: z.string(),
     donor_comment: z.string().nullable(), //i dont know if this field is nullable, but FOR NOW before I do better testing.
-    donor_name: z.string().nullable(), //i dont know if this field is nullable, but FOR NOW before I do better testing.
+    donor_name: z.string(), //i dont know if this field is nullable, but FOR NOW before I do better testing.
     fundraising_event_id: z.string(),
     poll_id: z.string().nullable().optional(),
     poll_option_id: z.string().nullable().optional(),
