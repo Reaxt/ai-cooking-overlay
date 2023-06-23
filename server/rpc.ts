@@ -2,10 +2,10 @@ import { initTRPC } from "@trpc/server"
 import { type Observer, observable } from "@trpc/server/observable"
 import { applyWSSHandler } from "@trpc/server/adapters/ws"
 import ws from "ws"
-import { type WebhookResponse } from "./zodobjects/webhook-response"
+import { Notification } from "./types"
 
-const observers = new Set<Observer<WebhookResponse, unknown>>()
-export function sendWebhookResponse(res: WebhookResponse) {
+const observers = new Set<Observer<Notification, unknown>>()
+export function sendWebhookResponse(res: Notification) {
   for (const o of observers) {
     o.next(res)
   }
@@ -14,7 +14,7 @@ export function sendWebhookResponse(res: WebhookResponse) {
 const t = initTRPC.create()
 export const router = t.router({
   webhook: t.procedure.subscription(() =>
-    observable<WebhookResponse>((o) => {
+    observable<Notification>((o) => {
       observers.add(o)
       return () => observers.delete(o)
     }),

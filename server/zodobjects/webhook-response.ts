@@ -8,6 +8,7 @@ const ACCEPTED_EVENT_TYPES = [
 
 export const WebhookResponse = z.object({
   data: z.object({
+    id: z.string(),
     amount: MoneyAmountResponse,
     campaign_id: z.string(),
     donor_comment: z.string().nullable(), //i dont know if this field is nullable, but FOR NOW before I do better testing.

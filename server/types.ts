@@ -1,23 +1,25 @@
 export type Donation = {
+  id: string
   donator: string
   amount: number
   message: string | null
   full: boolean //if this is from a webhook, and we have 'private' info.
   reward: Reward | null
-  Target: Target | null
+  rewardText: string | null
+  target: Target | null
   poll: PollOption | null
 }
 export type Reward = {
   id: string
   name: string
   description: string
-  imagePath: string
   cost: number
 }
 export type Target = {
   id: string
   name: string
   cost: number
+  amount: number
   amountRaised: number
   active: boolean
   achieved: boolean
