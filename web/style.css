@@ -38,7 +38,7 @@ body {
   grid-template-areas: 
     "Header Header Header Header Header Header"
     ". . . . . ."
-    ". . . . . ."
+    ". . . . Notifications Notifications"
     ". . . . Notifications Notifications"
     ". . . . Notifications Notifications"; 
     width: 100%;
@@ -83,3 +83,44 @@ body {
 
 }
 .Header { grid-area: Header; }
+.progressBar {
+  position: relative;
+  border-radius: 50px;
+  height: 60px;
+  clip-path: border-box;
+  align-items: center;
+}
+.progressBarBase {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  
+}
+.progressBarFill {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  clip-path: "polygon(0% 0%,0% 100%,100% 100%,100% 0%)"
+}
+.pointer {
+  position: absolute;
+}
+.lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0px;
+  border-radius: 50px;
+  clip-path: border-box;
+
+}
+.line {
+  position: absolute;
+  height: 100%;
+  width: 5px;
+  background-color: rgb(255, 0, 0);
+  top: 0px;
+  border-radius: 50px;
+  clip-path: border-box;
+}

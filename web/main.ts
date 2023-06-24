@@ -1,12 +1,19 @@
 import "./style.css"
 
 import { client } from "./rpc.ts"
-import { Donation } from "../server/types.ts"
+import { Campaign, Donation, Milestone } from "../server/types.ts"
 import { confetti } from "tsparticles-confetti"
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
+const progressAnimationOptions: KeyframeAnimationOptions = {
+  duration: 500,
+  easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+  fill: "forwards",
+}
+
 const donationsToProcess: Donation[] = []
 let isProcessingDonos = false
+let currentProgress = 0
 
 client.webhook.subscribe(undefined, {
   onData(webhook) {
@@ -33,10 +40,87 @@ const donoTest: Donation = {
   target: null,
   poll: null,
 }
+const testMilestones: Milestone[] = [
+  {
+    id: "adkj",
+    name: "one",
+    active: true,
+    achieved: true,
+    amount: 100,
+  },
+  {
+    id: "adkj",
+    name: "two",
+    active: true,
+    achieved: true,
+    amount: 200,
+  },
+]
 document.onclick = (x) => {
   addDonation(donoTest)
+  updateProgressBar(15)
+  addMilestones(testMilestones)
 }
 
+function updateProgressBar(percent: number) {
+  const progressBarFill = document.querySelector(".progressBarFill")
+  //const pointer = document.querySelector(".pointer")
+  if (progressBarFill == null /*|| pointer == null*/)
+    throw new Error("no progress bar found")
+  const width = progressBarFill.getBoundingClientRect().width
+  const height = progressBarFill.getBoundingClientRect().height
+  progressBarFill.setAttribute(
+    "style",
+    `clip-path: polygon(
+    0% 0%,
+    0% 100%,
+    ${percent}% 100%,
+    ${percent}% 0%
+   )`,
+  )
+  progressBarFill.animate(
+    [
+      {
+        clipPath: `polygon(
+      0% 0%,
+      0% 100%,
+      ${currentProgress}% 100%,
+      ${currentProgress}% 0%
+     )`,
+      },
+      {
+        clipPath: `polygon(
+      0% 0%,
+      0% 100%,
+      ${percent}% 100%,
+      ${percent}% 0%
+     )`,
+      },
+    ],
+    progressAnimationOptions,
+  )
+  currentProgress = percent
+}
+
+function addMilestones(milestones: Milestone[]) {
+  const goal = 1000
+  const lines = document.querySelector(".lines")
+  const progressBarFill = document.querySelector(".progressBarFill")
+  if (progressBarFill == null) throw new Error("no progress bar found")
+  if (lines == null) throw new Error("no lines")
+  while (lines.hasChildNodes()) {
+    lines.removeChild(lines.lastChild!)
+  }
+  milestones.forEach((x) => {
+    const percent = x.amount / goal
+    const width = progressBarFill.getBoundingClientRect().width
+    const line = document.createElement("div")
+    line.classList.add("line")
+    line.style.left = `${width * percent}px`
+    if (x.achieved) line.style.backgroundColor = "green"
+    lines.appendChild(line)
+  })
+}
 function addDonation(donation: Donation) {
   donationsToProcess.push(donation)
   if (!isProcessingDonos) {
